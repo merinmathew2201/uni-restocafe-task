@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
+import DishCard from '../components/DishCard';
 
 function Home() {
 
     const [categories,setCategories] = useState([])
     const [tab,setTab] = useState(0)
     console.log(categories);
+
+    const dishes = categories[tab]?.category_dishes || []
 
     useEffect(()=>{
         getAllCategories()
@@ -31,6 +34,9 @@ function Home() {
                 ))
             }
         </div>
+
+        {dishes?.map(dish=><DishCard key={dish?.dish_id} dish={dish}/>)}
+
     </>
   )
 }
