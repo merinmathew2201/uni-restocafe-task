@@ -4,9 +4,11 @@ import DishCard from '../components/DishCard';
 
 function Home() {
 
+    const [cartCount,setCartCount] = useState(0)
     const [categories,setCategories] = useState([])
     const [tab,setTab] = useState(0)
     console.log(categories);
+
 
     const dishes = categories[tab]?.category_dishes || []
 
@@ -14,6 +16,7 @@ function Home() {
         getAllCategories()
     },[])
 
+    // get all categories
     const getAllCategories = async()=>{
         try {
             const response = await fetch("https://zartek-task.vercel.app/api/resto-cafe")
@@ -24,9 +27,19 @@ function Home() {
             console.log(error);            
         }
     }
+
+    // add item to cart
+    const addToCart = ()=>{
+        setCartCount(prev=>prev+1)
+    }
+   // remove item from cart 
+    const removeCart = ()=>{
+        setCartCount(prev=>prev>0?prev-1:0)
+    }
+
   return (
     <>
-        <Header/>
+        <Header cartCount={cartCount}/>
         <div className=" my-5 flex overflow-x-auto border-b border-gray-400 thin-scrollbar">
             {
                 categories?.map((item,index)=>(
@@ -35,7 +48,8 @@ function Home() {
             }
         </div>
 
-        {dishes?.map(dish=><DishCard key={dish?.dish_id} dish={dish}/>)}
+        {dishes?.map(dish=><DishCard key={dish?.dish_id} dish={dish} addToCart={addToCart}
+        removeCart={removeCart} />)}
 
     </>
   )
